@@ -1,0 +1,84 @@
+schema: '2.0'
+stages:
+  dataingestion:
+    cmd: python src/dataingestion.py
+    deps:
+    - path: src/dataingestion.py
+      hash: md5
+      md5: 6e3cf039ba31ba0fbeeb844c83170a35
+      size: 2779
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 4d1de999a33dcaef12f3cca28f0b0391.dir
+      size: 443700
+      nfiles: 2
+  datapreprocessing:
+    cmd: python src/datapreprocessing.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 4d1de999a33dcaef12f3cca28f0b0391.dir
+      size: 443700
+      nfiles: 2
+    - path: src/datapreprocessing.py
+      hash: md5
+      md5: 8a436ca18ebb62f30a4570da1e7f580e
+      size: 3135
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: 72c8a7a66be65fcc1318d70d40f78314.dir
+      size: 254243
+      nfiles: 2
+  featureengineeering:
+    cmd: python src/featureengineeering.py
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: 72c8a7a66be65fcc1318d70d40f78314.dir
+      size: 254243
+      nfiles: 2
+    - path: src/featureengineeering.py
+      hash: md5
+      md5: 1b13b72eb24a720a86683477275598a4
+      size: 2940
+    outs:
+    - path: data/final
+      hash: md5
+      md5: 6575525de3edb1ac61f4a0cf73de6a85.dir
+      size: 683883
+      nfiles: 2
+  modelbuilding:
+    cmd: python src/modelbuilding.py
+    deps:
+    - path: data/final
+      hash: md5
+      md5: 6575525de3edb1ac61f4a0cf73de6a85.dir
+      size: 683883
+      nfiles: 2
+    - path: src/modelbuilding.py
+      hash: md5
+      md5: 8afc63cda426c6305bdc6da309955e4d
+      size: 2387
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: bf563ca1aa5c2a9c44322c10e33d9685
+      size: 1719
+  modelevaluation:
+    cmd: python src/modelevaluation.py
+    deps:
+    - path: models/model.joblib
+      hash: md5
+      md5: bf563ca1aa5c2a9c44322c10e33d9685
+      size: 1719
+    - path: src/modelevaluation.py
+      hash: md5
+      md5: 44913421bdf3b52d43ac2e70731c702d
+      size: 3025
+    outs:
+    - path: metric/metric.json
+      hash: md5
+      md5: 697b75215fb747d5c30416dba696ca05
+      size: 112

@@ -1,0 +1,56 @@
+stages:
+  dataingestion:
+    cmd: python src/dataingestion.py
+    deps:
+    - src/dataingestion.py
+    # params:
+    # - data_ingestion.test_size
+    outs:
+    - data/raw
+  datapreprocessing:
+    cmd: python src/datapreprocessing.py
+    deps:
+    - data/raw
+    - src/datapreprocessing.py
+    outs:
+    - data/interim
+  featureengineeering:
+    cmd: python src/featureengineeering.py
+    deps:
+    - data/interim
+    - src/featureengineeering.py
+    # params:
+    # - feature_engineering.max_features
+    outs:
+    - data/final
+  modelbuilding:
+    cmd: python src/modelbuilding.py
+    deps:
+    - data/final
+    - src/modelbuilding.py
+    # params:
+    # - model_building.n_estimators
+    # - model_building.random_state
+    outs:
+    - models/model.joblib
+  modelevaluation:
+    cmd: python src/modelevaluation.py
+    deps:
+    - models/model.joblib
+    - src/modelevaluation.py
+    metrics:
+    - metric/metric.json
+# params:
+# - dvclive/params.yaml
+# metrics:
+# - dvclive/metrics.json
+# plots:
+# - dvclive/plots/metrics:
+#     x: step
+# params:
+# - dvclive/params.yaml
+# metrics:
+# - dvclive/metrics.json
+# plots:
+# - dvclive/plots/metrics:
+#     x: step
